@@ -76,4 +76,65 @@ document.addEventListener('DOMContentLoaded', () => {
     el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
     observer.observe(el);
   });
+
+  // ============================================================
+  // Modal de Login
+  // ============================================================
+  const btnLogin    = document.getElementById('btnLogin');
+  const loginModal  = document.getElementById('loginModal');
+  const modalClose  = document.getElementById('modalClose');
+  const togglePass  = document.getElementById('togglePassword');
+  const passInput   = document.getElementById('loginPassword');
+
+  function openModal() {
+    loginModal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('loginEmail').focus(), 50);
+  }
+
+  function closeModal() {
+    loginModal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (btnLogin)   btnLogin.addEventListener('click', openModal);
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+
+  // Fecha ao clicar fora do modal-box
+  if (loginModal) {
+    loginModal.addEventListener('click', (e) => {
+      if (e.target === loginModal) closeModal();
+    });
+  }
+
+  // Fecha com ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && loginModal && loginModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Mostrar/ocultar senha
+  if (togglePass && passInput) {
+    togglePass.addEventListener('click', () => {
+      const isText = passInput.type === 'text';
+      passInput.type = isText ? 'password' : 'text';
+      togglePass.setAttribute('aria-label', isText ? 'Mostrar senha' : 'Ocultar senha');
+    });
+  }
+
+  // Submit do form (placeholder)
+  const loginForm = document.getElementById('loginForm');
+  if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.textContent = 'Entrando...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = 'Entrar';
+        btn.disabled = false;
+      }, 1800);
+    });
+  }
 });
